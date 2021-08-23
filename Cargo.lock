@@ -693,6 +693,7 @@ dependencies = [
 name = "solana-escrow-contract-example"
 version = "0.1.0"
 dependencies = [
+ "arrayref",
  "solana-program",
  "spl-token",
  "thiserror",

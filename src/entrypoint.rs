@@ -12,8 +12,11 @@
 	*/
 
 use solana_program::{
-	account_info::AccountInfo, entrypoint, entrypoint::ProgramResult, msg, pubkey::Pubkey,
+    account_info::AccountInfo, entrypoint, entrypoint::ProgramResult, pubkey::Pubkey
 };
+
+use crate::processor::Processor;
+
 
 // Using the entrypoint! macro to declare the process_instruction function the entrypoint to the program.
 //     Entrypoints are the only way to call a program;
@@ -25,26 +28,19 @@ entrypoint!(process_instruction);
 
 /**
  * Accounts:
-	* 		Accounts are used to store state (as Solana programs are stateless by default).
-	* 		Each account can hold data & SOL.
-	* 		Each account also has an owner and only the owner may debit the account and adjust its data.
-	* 		Accounts can only be owned by programs. Eg: the `system_program`.
-	* 		All accounts to be read or written to must be passed into the entrypoint function.
-	* 			This allows the runtime to parallelise transactions.
-	* 			Transactions can run in parallel that do not touch the same accounts
-	* 				or touch the same accounts but only read and don't write.
-	*/
-
+ * 		Accounts are used to store state (as Solana programs are stateless by default).
+ * 		Each account can hold data & SOL.
+ * 		Each account also has an owner and only the owner may debit the account and adjust its data.
+ * 		Accounts can only be owned by programs. Eg: the `system_program`.
+ * 		All accounts to be read or written to must be passed into the entrypoint function.
+ * 			This allows the runtime to parallelise transactions.
+ * 			Transactions can run in parallel that do not touch the same accounts
+ * 				or touch the same accounts but only read and don't write.
+ */
 fn process_instruction(
 	program_id: &Pubkey,			//  id of the currently executing program
 	accounts: &[AccountInfo],		// Accounts are used to store state
 	instruction_data: &[u8],		// data passed to the program by the caller
 ) -> ProgramResult {
-	msg!(
-		"process_instruction: {}: {} accounts, data={:?}",
-		program_id,
-		accounts.len(),
-		instruction_data
-	);
-	Ok(())
+	Processor::process(program_id, accounts, instruction_data)
 }
